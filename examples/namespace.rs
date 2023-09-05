@@ -3,34 +3,35 @@ use hcn::*;
 use windows::core::GUID;
 
 pub fn main() -> Result<(), Box<dyn std::error::Error>> {
-    let namespace = HostComputeNamespace::default();
+    let api_namespace = HostComputeNamespace::default();
 
     // create a network with API
-    let namespace = serde_json::to_string(&namespace).unwrap();
-    println!("Creating namespace: {}", namespace);
-    let namespace_handle = api::create_namespace(&GUID::zeroed(), &namespace)?;
+    let api_namespace = serde_json::to_string(&api_namespace).unwrap();
+    println!("Creating namespace: {}", api_namespace);
+    let namespace_handle = api::create_namespace(&GUID::zeroed(), &api_namespace)?;
 
     // we don't get info back so need to query to get metadata about network
     let query = HostComputeQuery::default();
     let query = serde_json::to_string(&query).unwrap();
     
     println!("Query for network info: {}", query);
-    let namespace = api::query_namespace_properties(namespace_handle, &query)?;
-    println!("Query success: {}", namespace);
-    let namespace: HostComputeNamespace = serde_json::from_str(&namespace).unwrap();
+    let api_namespace = api::query_namespace_properties(namespace_handle, &query)?;
+    println!("Query success: {}", api_namespace);
+    let api_namespace: HostComputeNamespace = serde_json::from_str(&api_namespace).unwrap();
     api::close_namespace(namespace_handle)?;
 
-    // We can use the library to get the namespace info and handle all the opening/closing of handles and querying/serialization
-    let library_namespace = get_namespace(namespace.id.as_str())?;
+    // We can use the library to get the namespace info
+    // it will handle all the opening/closing of handles and querying/serialization
+    let namespace = get_namespace(api_namespace.id.as_str())?;
 
     // Values should be the same as if we used the API as we did above
-    assert_eq!(namespace.id, library_namespace.id);
-    assert_eq!(namespace.namespace_type, library_namespace.namespace_type);
-    assert_eq!(namespace.namespace_id, library_namespace.namespace_id);
-    println!("It works: {}", library_namespace.id);
+    assert_eq!(api_namespace.id, namespace.id);
+    assert_eq!(api_namespace.namespace_type, namespace.namespace_type);
+    assert_eq!(api_namespace.namespace_id, namespace.namespace_id);
+    println!("It works: {}", namespace.id);
 
-    println!("Deleting network: {}", library_namespace.id);
-    api::delete_namespace(&GUID::from(library_namespace.id.as_str()))?;
+    println!("Deleting network: {}", namespace.id);
+    api::delete_namespace(&GUID::from(namespace.id.as_str()))?;
 
     Ok(())
 }

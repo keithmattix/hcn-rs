@@ -1,13 +1,12 @@
+/// Modified from https://github.com/rafawo/winutils-rs under MIT license
 
 use std::ffi::c_void;
-
 use windows::core::PWSTR;
 use windows::Win32::System::Com::CoTaskMemFree;
 
-/// Thin Rust wrapper of a WSTR pointer that can be used to
+/// Thin Rust wrapper of a PWSTR pointer that can be used to
 /// receive return parameters from windows API that use CoTaskMemAlloc under the covers.
 /// On drop, frees the memory using CoTaskMemFree.
-/// Modified from https://github.com/rafawo/winutils-rs under MIT license
 pub struct CoTaskMemWString {
     ptr: PWSTR,
 }
