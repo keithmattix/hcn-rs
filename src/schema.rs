@@ -220,9 +220,9 @@ pub struct HostComputeNamespace {
     #[serde(default, skip_serializing_if = "Vec::is_empty")]
     pub resources: Vec<NamespaceResource>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    pub schema_version: Option<Version>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
     pub create_with_compartment: Option<bool>,
+    #[serde(default)]
+    pub schema_version: Version,
 }
 
 #[derive(Debug, Deserialize, Serialize, PartialEq)]
