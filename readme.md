@@ -1,4 +1,4 @@
-![ci](https://github.com/github/docs/actions/workflows/ci.yml/badge.svg)
+![ci](https://github.com/jsturtevant/hcn-rs/actions/workflows/ci.yml/badge.svg)
 
 # hcn-rs
 
