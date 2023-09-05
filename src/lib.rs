@@ -1,5 +1,5 @@
 pub mod api;
-pub mod types;
+pub mod schema;
 mod cotask;
 
 mod hns {

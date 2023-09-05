@@ -1,4 +1,4 @@
-use hns_rs::{api, types::*};
+use hns::{api, schema::*};
 use windows::core::GUID;
 
 pub fn main() -> Result<(), Box<dyn std::error::Error>> {

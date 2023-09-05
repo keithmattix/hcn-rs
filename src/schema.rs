@@ -1,8 +1,8 @@
+// see https://learn.microsoft.com/en-us/virtualization/api/hcn/hns_schema
+
 use serde::{Deserialize, Serialize};
 use serde_repr::{Deserialize_repr, Serialize_repr};
 
-
-// see https://learn.microsoft.com/en-us/virtualization/api/hcn/hns_schema
 #[derive(Default, Debug, Deserialize, Serialize)]
 #[serde(rename_all = "PascalCase")]
 pub struct HostComputeNetwork {
