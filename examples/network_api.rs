@@ -1,4 +1,4 @@
-use hns::{api, schema::*};
+use hcn::{api, schema::*};
 use windows::core::GUID;
 
 pub fn main() -> Result<(), Box<dyn std::error::Error>> {
