@@ -1,5 +1,4 @@
 /// Modified from https://github.com/rafawo/winutils-rs under MIT license
-
 use std::ffi::c_void;
 use windows::core::PWSTR;
 use windows::Win32::System::Com::CoTaskMemFree;
@@ -25,7 +24,7 @@ pub trait AsOption<U> {
 
 impl AsOption<*mut PWSTR> for CoTaskMemWString {
     fn as_option(&self) -> Option<*mut PWSTR> {
-       Some(self.ptr.as_ptr() as *mut PWSTR)
+        Some(self.ptr.as_ptr() as *mut PWSTR)
     }
 }
 
@@ -38,9 +37,7 @@ impl AsOption<*const c_void> for CoTaskMemWString {
 impl CoTaskMemWString {
     /// Creates a new empty CoTaskMemWString, with its pointer initialized to null.
     pub fn new() -> CoTaskMemWString {
-        CoTaskMemWString {
-            ptr: PWSTR::null(),
-        }
+        CoTaskMemWString { ptr: PWSTR::null() }
     }
 
     pub fn as_ptr(&mut self) -> *mut PWSTR {
@@ -50,9 +47,7 @@ impl CoTaskMemWString {
     /// This function creates a String representation of the underlying WSTR.
     pub fn to_string(&mut self) -> String {
         match self.ptr {
-            ptr if !ptr.is_null() => unsafe {
-                ptr.to_string().unwrap_or(String::from(""))
-            },
+            ptr if !ptr.is_null() => unsafe { ptr.to_string().unwrap_or(String::from("")) },
             _ => String::from(""),
         }
     }

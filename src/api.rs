@@ -1,10 +1,18 @@
-/// Modified from https://github.com/rafawo/hcs-rs under MIT license
-
-use windows::Win32::System::HostComputeNetwork::{HCN_NOTIFICATION_CALLBACK, HcnCreateNetwork, HcnEnumerateNetworks, HcnOpenNetwork, HcnModifyNetwork, HcnDeleteNetwork, HcnCloseNetwork, HcnEnumerateNamespaces, HcnCreateNamespace, HcnOpenNamespace, HcnModifyNamespace, HcnQueryNamespaceProperties, HcnEnumerateEndpoints, HcnCreateEndpoint, HcnOpenEndpoint, HcnModifyEndpoint, HcnQueryEndpointProperties, HcnDeleteEndpoint, HcnCloseEndpoint, HcnEnumerateLoadBalancers, HcnCreateLoadBalancer, HcnOpenLoadBalancer, HcnModifyLoadBalancer, HcnQueryLoadBalancerProperties, HcnDeleteLoadBalancer, HcnCloseLoadBalancer, HcnRegisterServiceCallback, HcnUnregisterServiceCallback, HcnQueryNetworkProperties, HcnDeleteNamespace, HcnCloseNamespace};
-use windows::core::{GUID, HSTRING};
-use anyhow::{Result, Context, Ok};
-use crate::cotask::{CoTaskMemWString, AsOption};
+use crate::cotask::{AsOption, CoTaskMemWString};
+use anyhow::{Context, Ok, Result};
 use std::ffi::c_void;
+use windows::core::{GUID, HSTRING};
+/// Modified from https://github.com/rafawo/hcs-rs under MIT license
+use windows::Win32::System::HostComputeNetwork::{
+    HcnCloseEndpoint, HcnCloseLoadBalancer, HcnCloseNamespace, HcnCloseNetwork, HcnCreateEndpoint,
+    HcnCreateLoadBalancer, HcnCreateNamespace, HcnCreateNetwork, HcnDeleteEndpoint,
+    HcnDeleteLoadBalancer, HcnDeleteNamespace, HcnDeleteNetwork, HcnEnumerateEndpoints,
+    HcnEnumerateLoadBalancers, HcnEnumerateNamespaces, HcnEnumerateNetworks, HcnModifyEndpoint,
+    HcnModifyLoadBalancer, HcnModifyNamespace, HcnModifyNetwork, HcnOpenEndpoint,
+    HcnOpenLoadBalancer, HcnOpenNamespace, HcnOpenNetwork, HcnQueryEndpointProperties,
+    HcnQueryLoadBalancerProperties, HcnQueryNamespaceProperties, HcnQueryNetworkProperties,
+    HcnRegisterServiceCallback, HcnUnregisterServiceCallback, HCN_NOTIFICATION_CALLBACK,
+};
 
 /// Handle to a callback registered on an hns object
 pub struct HcnCallback(*const c_void);
@@ -32,7 +40,6 @@ pub struct HcnLoadBalancerHandle(*const c_void);
 #[derive(Clone, Copy)]
 pub struct HcnServiceHandle(*const c_void);
 
-
 /// Return a list of existing Networks.
 pub fn enumerate_networks(query: &str) -> Result<String> {
     unsafe {
@@ -43,8 +50,9 @@ pub fn enumerate_networks(query: &str) -> Result<String> {
             &HSTRING::from(query),
             networks.as_ptr(),
             error_record.as_option(),
-        ).context(error_record.to_string())?;
-                 
+        )
+        .context(error_record.to_string())?;
+
         Ok(networks.to_string())
     }
 }
@@ -60,19 +68,25 @@ pub fn create_network(id: &GUID, settings: &str) -> Result<HcnNetworkHandle> {
             &HSTRING::from(settings),
             &mut network_handle,
             error_record.as_option(),
-        ).context(error_record.to_string())?; 
-        
-        Ok(HcnNetworkHandle(network_handle))   
+        )
+        .context(error_record.to_string())?;
+
+        Ok(HcnNetworkHandle(network_handle))
     }
 }
 
 /// Lookup an existing network.
 pub fn open_network(id: &GUID) -> Result<HcnNetworkHandle> {
     unsafe {
-        let mut network_handle = std::ptr::null_mut();
+        let network_handle = std::ptr::null_mut();
         let mut error_record = CoTaskMemWString::new();
 
-        HcnOpenNetwork(id, &mut (network_handle as *mut c_void), error_record.as_option()).context(error_record.to_string())?;
+        HcnOpenNetwork(
+            id,
+            &mut (network_handle as *mut c_void),
+            error_record.as_option(),
+        )
+        .context(error_record.to_string())?;
 
         Ok(HcnNetworkHandle(network_handle))
     }
@@ -87,7 +101,8 @@ pub fn modify_network(network: HcnNetworkHandle, settings: &str) -> Result<()> {
             network.0,
             &HSTRING::from(settings),
             error_record.as_option(),
-        ).context(error_record.to_string())?;
+        )
+        .context(error_record.to_string())?;
 
         Ok(())
     }
@@ -104,7 +119,8 @@ pub fn query_network_properties(network: HcnNetworkHandle, query: &str) -> Resul
             &HSTRING::from(query),
             properties.as_ptr(),
             error_record.as_option(),
-        ).context(error_record.to_string())?;
+        )
+        .context(error_record.to_string())?;
 
         Ok(properties.to_string())
     }
@@ -140,7 +156,8 @@ pub fn enumerate_namespaces(query: &str) -> Result<String> {
             &HSTRING::from(query),
             namespaces.as_ptr(),
             error_record.as_option(),
-        ).context(error_record.to_string())?;
+        )
+        .context(error_record.to_string())?;
 
         Ok(namespaces.to_string())
     }
@@ -157,7 +174,8 @@ pub fn create_namespace(id: &GUID, settings: &str) -> Result<HcnNamespaceHandle>
             &HSTRING::from(settings),
             &mut namespace_handle,
             error_record.as_option(),
-        ).context(error_record.to_string())?;
+        )
+        .context(error_record.to_string())?;
 
         Ok(HcnNamespaceHandle(namespace_handle))
     }
@@ -169,7 +187,8 @@ pub fn open_namespace(id: &GUID) -> Result<HcnNamespaceHandle> {
         let mut namespace_handle = std::ptr::null_mut();
         let mut error_record = CoTaskMemWString::new();
 
-        HcnOpenNamespace(id, &mut namespace_handle, error_record.as_option()).context(error_record.to_string())?;
+        HcnOpenNamespace(id, &mut namespace_handle, error_record.as_option())
+            .context(error_record.to_string())?;
 
         Ok(HcnNamespaceHandle(namespace_handle))
     }
@@ -184,7 +203,8 @@ pub fn modify_namespace(namespace: HcnNamespaceHandle, settings: &str) -> Result
             namespace.0,
             &HSTRING::from(settings),
             error_record.as_option(),
-        ).context(error_record.to_string())?;
+        )
+        .context(error_record.to_string())?;
 
         Ok(())
     }
@@ -201,7 +221,8 @@ pub fn query_namespace_properties(namespace: HcnNamespaceHandle, query: &str) ->
             &HSTRING::from(query),
             properties.as_ptr(),
             error_record.as_option(),
-        ) .context(error_record.to_string())?;
+        )
+        .context(error_record.to_string())?;
 
         Ok(properties.to_string())
     }
@@ -237,7 +258,8 @@ pub fn enumerate_endpoints(query: &str) -> Result<String> {
             &HSTRING::from(query),
             endpoints.as_ptr(),
             error_record.as_option(),
-        ).context(error_record.to_string())?;
+        )
+        .context(error_record.to_string())?;
 
         Ok(endpoints.to_string())
     }
@@ -259,7 +281,8 @@ pub fn create_endpoint(
             &HSTRING::from(settings),
             &mut endpoint_handle,
             error_record.as_option(),
-        ).context(error_record.to_string())?;
+        )
+        .context(error_record.to_string())?;
 
         Ok(HcnEndpointHandle(endpoint_handle))
     }
@@ -271,7 +294,8 @@ pub fn open_endpoint(id: &GUID) -> Result<HcnEndpointHandle> {
         let mut endpoint_handle = std::ptr::null_mut();
         let mut error_record = CoTaskMemWString::new();
 
-        HcnOpenEndpoint(id, &mut endpoint_handle, error_record.as_option()).context(error_record.to_string())?;
+        HcnOpenEndpoint(id, &mut endpoint_handle, error_record.as_option())
+            .context(error_record.to_string())?;
 
         Ok(HcnEndpointHandle(endpoint_handle))
     }
@@ -286,7 +310,8 @@ pub fn modify_endpoint(endpoint: HcnEndpointHandle, settings: &str) -> Result<()
             endpoint.0,
             &HSTRING::from(settings),
             error_record.as_option(),
-        ).context(error_record.to_string())?;
+        )
+        .context(error_record.to_string())?;
 
         Ok(())
     }
@@ -303,7 +328,8 @@ pub fn query_endpoint_properties(endpoint: HcnEndpointHandle, query: &str) -> Re
             &HSTRING::from(query),
             properties.as_ptr(),
             error_record.as_option(),
-        ).context(error_record.to_string())?;
+        )
+        .context(error_record.to_string())?;
 
         Ok(properties.to_string())
     }
@@ -339,7 +365,8 @@ pub fn enumerate_load_balancers(query: &str) -> Result<String> {
             &HSTRING::from(query),
             load_balancers.as_ptr(),
             error_record.as_option(),
-        ).context(error_record.to_string())?;
+        )
+        .context(error_record.to_string())?;
 
         Ok(load_balancers.to_string())
     }
@@ -356,7 +383,8 @@ pub fn create_load_balancer(id: &GUID, settings: &str) -> Result<HcnLoadBalancer
             &HSTRING::from(settings),
             &mut load_balancer_handle,
             error_record.as_option(),
-        ) .context(error_record.to_string())?;
+        )
+        .context(error_record.to_string())?;
 
         Ok(HcnLoadBalancerHandle(load_balancer_handle))
     }
@@ -368,7 +396,8 @@ pub fn open_load_balancer(id: &GUID) -> Result<HcnLoadBalancerHandle> {
         let mut load_balancer_handle = std::ptr::null_mut();
         let mut error_record = CoTaskMemWString::new();
 
-        HcnOpenLoadBalancer(id, &mut load_balancer_handle, error_record.as_option()).context(error_record.to_string())?;
+        HcnOpenLoadBalancer(id, &mut load_balancer_handle, error_record.as_option())
+            .context(error_record.to_string())?;
 
         Ok(HcnLoadBalancerHandle(load_balancer_handle))
     }
@@ -383,7 +412,8 @@ pub fn modify_load_balancer(load_balancer: HcnLoadBalancerHandle, settings: &str
             load_balancer.0,
             &HSTRING::from(settings),
             error_record.as_option(),
-        ).context(error_record.to_string())?;
+        )
+        .context(error_record.to_string())?;
 
         Ok(())
     }
@@ -403,7 +433,8 @@ pub fn query_load_balancer_properties(
             &HSTRING::from(query),
             properties.as_ptr(),
             error_record.as_option(),
-        ).context(error_record.to_string())?;
+        )
+        .context(error_record.to_string())?;
 
         Ok(properties.to_string())
     }

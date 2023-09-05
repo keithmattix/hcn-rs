@@ -1,4 +1,4 @@
-use hcn::{schema::*, api};
+use hcn::{api, schema::*};
 use windows::core::GUID;
 
 pub fn main() -> Result<(), Box<dyn std::error::Error>> {
@@ -12,7 +12,7 @@ pub fn main() -> Result<(), Box<dyn std::error::Error>> {
     // we don't get info back so need to query to get metadata about network
     let query = HostComputeQuery::default();
     let query = serde_json::to_string(&query).unwrap();
-    
+
     println!("Query for network info: {}", query);
     let namespace = api::query_namespace_properties(namesapce_handle, &query)?;
     println!("Query success: {}", namespace);

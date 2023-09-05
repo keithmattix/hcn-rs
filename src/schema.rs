@@ -6,11 +6,11 @@ use serde_repr::{Deserialize_repr, Serialize_repr};
 #[derive(Default, Debug, Deserialize, Serialize)]
 #[serde(rename_all = "PascalCase")]
 pub struct HostComputeNetwork {
-    #[serde(rename="ID", default, skip_serializing_if = "String::is_empty")]
+    #[serde(rename = "ID", default, skip_serializing_if = "String::is_empty")]
     pub id: String,
     #[serde(default, skip_serializing_if = "String::is_empty")]
     pub name: String,
-    #[serde(rename="Type", default, skip_serializing_if = "Option::is_none")]
+    #[serde(rename = "Type", default, skip_serializing_if = "Option::is_none")]
     pub network_type: Option<NetworkType>,
     #[serde(default, skip_serializing_if = "Vec::is_empty")]
     pub policies: Vec<NetworkPolicy>,
@@ -38,10 +38,7 @@ pub struct Version {
 
 impl Default for Version {
     fn default() -> Self {
-        Self {
-            major: 2,
-            minor: 2,
-        }
+        Self { major: 2, minor: 2 }
     }
 }
 
@@ -50,7 +47,7 @@ impl Default for Version {
 pub struct Health {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub data: Option<serde_json::Value>,
-    
+
     #[serde(skip_serializing_if = "Option::is_none")]
     pub extra: Option<ExtraParams>,
 }
@@ -60,19 +57,19 @@ pub struct Health {
 pub struct ExtraParams {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub resources: Option<serde_json::Value>,
-    
+
     #[serde(skip_serializing_if = "Option::is_none")]
     pub shared_containers: Option<serde_json::Value>,
-    
-    #[serde( skip_serializing_if = "Option::is_none")]
+
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub layered_on: Option<String>,
-    
+
     #[serde(skip_serializing_if = "Option::is_none")]
     pub switch_guid: Option<String>,
-    
+
     #[serde(skip_serializing_if = "Option::is_none")]
     pub utility_vm: Option<String>,
-    
+
     #[serde(skip_serializing_if = "Option::is_none")]
     pub virtual_machine: Option<String>,
 }
@@ -82,13 +79,13 @@ pub struct ExtraParams {
 pub struct Dns {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub domain: Option<String>,
-    
+
     #[serde(skip_serializing_if = "Option::is_none")]
     pub search: Option<Vec<String>>,
-    
+
     #[serde(skip_serializing_if = "Option::is_none")]
     pub server_list: Option<Vec<String>>,
-    
+
     #[serde(skip_serializing_if = "Option::is_none")]
     pub options: Option<Vec<String>>,
 }
@@ -120,7 +117,7 @@ pub struct NetworkPolicy {
 pub struct Ipam {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub r#type: Option<String>,
-    
+
     #[serde(skip_serializing_if = "Vec::is_empty")]
     pub subnets: Vec<Subnet>,
 }
@@ -139,10 +136,10 @@ impl Default for Ipam {
 pub struct Subnet {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub ip_address_prefix: Option<String>,
-    
+
     #[serde(skip_serializing_if = "Vec::is_empty")]
     pub policies: Vec<serde_json::Value>,
-    
+
     #[serde(skip_serializing_if = "Vec::is_empty")]
     pub routes: Vec<Route>,
 }
@@ -151,14 +148,12 @@ impl Default for Subnet {
     fn default() -> Self {
         Self {
             ip_address_prefix: Some("10.0.0.0/16".to_string()),
-                    routes: vec![
-                        Route{
-                            next_hop: Some("10.0.0.1".to_string()),
-                            destination_prefix: Some("0.0.0.0/0".to_string()),
-                            ..Default::default()
-                        }
-                    ],
-                    policies: vec![],
+            routes: vec![Route {
+                next_hop: Some("10.0.0.1".to_string()),
+                destination_prefix: Some("0.0.0.0/0".to_string()),
+                ..Default::default()
+            }],
+            policies: vec![],
         }
     }
 }
@@ -168,10 +163,10 @@ impl Default for Subnet {
 pub struct Route {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_hop: Option<String>,
-    
+
     #[serde(skip_serializing_if = "Option::is_none")]
     pub destination_prefix: Option<String>,
-    
+
     #[serde(skip_serializing_if = "Option::is_none")]
     pub metric: Option<u16>,
 }
@@ -206,7 +201,6 @@ pub struct MacRange {
 pub struct MacPool {
     pub ranges: Option<Vec<MacRange>>,
 }
-
 
 #[derive(Default, Debug, Deserialize, Serialize)]
 #[serde(rename_all = "PascalCase")]
@@ -243,12 +237,11 @@ pub struct NamespaceResource {
     pub data: Option<serde_json::Value>,
 }
 
-#[derive(Debug,Deserialize, Serialize, PartialEq, Eq)]
+#[derive(Debug, Deserialize, Serialize, PartialEq, Eq)]
 pub enum NamespaceResourceType {
     Container,
     Endpoint,
 }
-
 
 #[derive(Debug, Default, Deserialize_repr, Serialize_repr, PartialEq, Eq)]
 #[repr(u32)]

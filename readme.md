@@ -1,3 +1,5 @@
+![ci](https://github.com/github/docs/actions/workflows/ci.yml/badge.svg)
+
 # hcn-rs
 
 Library for working with the [Windows Host Compute Network](https://learn.microsoft.com/en-us/windows-server/networking/technologies/hcn/hcn-top).

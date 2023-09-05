@@ -2,7 +2,7 @@ use hcn::{api, schema::*};
 use windows::core::GUID;
 
 pub fn main() -> Result<(), Box<dyn std::error::Error>> {
-    let network = HostComputeNetwork{
+    let network = HostComputeNetwork {
         network_type: Some(NetworkType::NAT),
         name: "test".to_string(),
         ipams: vec![Ipam::default()],
@@ -17,7 +17,7 @@ pub fn main() -> Result<(), Box<dyn std::error::Error>> {
     // we don't get info back so need to query to get metadata about network
     let query = HostComputeQuery::default();
     let query = serde_json::to_string(&query).unwrap();
-    
+
     println!("Query for network info: {}", query);
     let network = api::query_network_properties(network_handle, &query)?;
     println!("Query success: {}", network);
