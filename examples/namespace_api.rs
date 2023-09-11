@@ -2,6 +2,8 @@ use hcn::{api, schema::*};
 use windows::core::GUID;
 
 pub fn main() -> Result<(), Box<dyn std::error::Error>> {
+    //turn logging on with $env:RUST_LOG="debug"      
+    let _ = env_logger::try_init();
     let namespace = HostComputeNamespace::default();
 
     // create a network with API

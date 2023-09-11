@@ -33,6 +33,7 @@ jobs:
         run: cargo test
       - name: Run Examples
         run: |
+          $env:RUST_LOG="debug"
           cargo run --example network_api
           cargo run --example namespace_api
           cargo run --example namespace

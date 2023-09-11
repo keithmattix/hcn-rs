@@ -46,6 +46,7 @@ pub fn enumerate_networks(query: &str) -> Result<String> {
         let mut networks = CoTaskMemWString::new();
         let mut error_record = CoTaskMemWString::new();
 
+        log::debug!("query: {}", query);
         HcnEnumerateNetworks(
             &HSTRING::from(query),
             networks.as_ptr(),
@@ -63,6 +64,7 @@ pub fn create_network(id: &GUID, settings: &str) -> Result<HcnNetworkHandle> {
         let mut network_handle = std::ptr::null_mut();
         let mut error_record = CoTaskMemWString::new();
 
+        log::debug!("settings: {}", settings);
         HcnCreateNetwork(
             id,
             &HSTRING::from(settings),
@@ -97,6 +99,7 @@ pub fn modify_network(network: HcnNetworkHandle, settings: &str) -> Result<()> {
     unsafe {
         let mut error_record = CoTaskMemWString::new();
 
+        log::debug!("settings: {}", settings);
         HcnModifyNetwork(
             network.0,
             &HSTRING::from(settings),
@@ -114,6 +117,7 @@ pub fn query_network_properties(network: HcnNetworkHandle, query: &str) -> Resul
         let mut properties = CoTaskMemWString::new();
         let mut error_record = CoTaskMemWString::new();
 
+        log::debug!("query: {}", query);
         HcnQueryNetworkProperties(
             network.0,
             &HSTRING::from(query),
@@ -152,6 +156,7 @@ pub fn enumerate_namespaces(query: &str) -> Result<String> {
         let mut namespaces = CoTaskMemWString::new();
         let mut error_record = CoTaskMemWString::new();
 
+        log::debug!("query: {}", query);
         HcnEnumerateNamespaces(
             &HSTRING::from(query),
             namespaces.as_ptr(),
@@ -169,6 +174,7 @@ pub fn create_namespace(id: &GUID, settings: &str) -> Result<HcnNamespaceHandle>
         let mut namespace_handle = std::ptr::null_mut();
         let mut error_record = CoTaskMemWString::new();
 
+        log::debug!("settings: {}", settings);
         HcnCreateNamespace(
             id,
             &HSTRING::from(settings),
@@ -199,6 +205,7 @@ pub fn modify_namespace(namespace: HcnNamespaceHandle, settings: &str) -> Result
     unsafe {
         let mut error_record = CoTaskMemWString::new();
 
+        log::debug!("settings: {}", settings);
         HcnModifyNamespace(
             namespace.0,
             &HSTRING::from(settings),
@@ -216,6 +223,7 @@ pub fn query_namespace_properties(namespace: HcnNamespaceHandle, query: &str) ->
         let mut properties = CoTaskMemWString::new();
         let mut error_record = CoTaskMemWString::new();
 
+        log::debug!("query: {}", query);
         HcnQueryNamespaceProperties(
             namespace.0,
             &HSTRING::from(query),
@@ -254,6 +262,7 @@ pub fn enumerate_endpoints(query: &str) -> Result<String> {
         let mut endpoints = CoTaskMemWString::new();
         let mut error_record = CoTaskMemWString::new();
 
+        log::debug!("query: {}", query);
         HcnEnumerateEndpoints(
             &HSTRING::from(query),
             endpoints.as_ptr(),
@@ -275,6 +284,7 @@ pub fn create_endpoint(
         let mut endpoint_handle = std::ptr::null_mut();
         let mut error_record = CoTaskMemWString::new();
 
+        log::debug!("settings: {}", settings);
         HcnCreateEndpoint(
             network.0,
             id,
@@ -306,6 +316,7 @@ pub fn modify_endpoint(endpoint: HcnEndpointHandle, settings: &str) -> Result<()
     unsafe {
         let mut error_record = CoTaskMemWString::new();
 
+        log::debug!("settings: {}", settings);
         HcnModifyEndpoint(
             endpoint.0,
             &HSTRING::from(settings),
@@ -323,6 +334,7 @@ pub fn query_endpoint_properties(endpoint: HcnEndpointHandle, query: &str) -> Re
         let mut properties = CoTaskMemWString::new();
         let mut error_record = CoTaskMemWString::new();
 
+        log::debug!("query: {}", query);
         HcnQueryEndpointProperties(
             endpoint.0,
             &HSTRING::from(query),
@@ -361,6 +373,7 @@ pub fn enumerate_load_balancers(query: &str) -> Result<String> {
         let mut load_balancers = CoTaskMemWString::new();
         let mut error_record = CoTaskMemWString::new();
 
+        log::debug!("query: {}", query);
         HcnEnumerateLoadBalancers(
             &HSTRING::from(query),
             load_balancers.as_ptr(),
@@ -378,6 +391,7 @@ pub fn create_load_balancer(id: &GUID, settings: &str) -> Result<HcnLoadBalancer
         let mut load_balancer_handle = std::ptr::null_mut();
         let mut error_record = CoTaskMemWString::new();
 
+        log::debug!("settings: {}", settings);
         HcnCreateLoadBalancer(
             id,
             &HSTRING::from(settings),
@@ -408,6 +422,7 @@ pub fn modify_load_balancer(load_balancer: HcnLoadBalancerHandle, settings: &str
     unsafe {
         let mut error_record = CoTaskMemWString::new();
 
+        log::debug!("settings: {}", settings);
         HcnModifyLoadBalancer(
             load_balancer.0,
             &HSTRING::from(settings),
@@ -428,6 +443,7 @@ pub fn query_load_balancer_properties(
         let mut properties = CoTaskMemWString::new();
         let mut error_record = CoTaskMemWString::new();
 
+        log::debug!("query: {}", query);
         HcnQueryLoadBalancerProperties(
             load_balancer.0,
             &HSTRING::from(query),

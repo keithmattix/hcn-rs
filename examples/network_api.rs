@@ -2,6 +2,8 @@ use hcn::{api, schema::*};
 use windows::core::GUID;
 
 pub fn main() -> Result<(), Box<dyn std::error::Error>> {
+    //turn logging on with $env:RUST_LOG="debug"      
+    let _ = env_logger::try_init();
     let network = HostComputeNetwork {
         network_type: Some(NetworkType::NAT),
         name: "test".to_string(),
@@ -18,9 +20,7 @@ pub fn main() -> Result<(), Box<dyn std::error::Error>> {
     let query = HostComputeQuery::default();
     let query = serde_json::to_string(&query).unwrap();
 
-    println!("Query for network info: {}", query);
     let network = api::query_network_properties(network_handle, &query)?;
-    println!("Query success: {}", network);
     let network: HostComputeNetwork = serde_json::from_str(&network).unwrap();
     api::close_network(network_handle)?;
 

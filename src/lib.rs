@@ -15,6 +15,7 @@ pub fn get_namespace(id: &str) -> Result<HostComputeNamespace> {
     let query = serde_json::to_string(&query).unwrap();
 
     let name_space = api::query_namespace_properties(namespace_handle, &query)?;
+    log::debug!("raw namespace: {}", name_space);
     let name_space: HostComputeNamespace = serde_json::from_str(&name_space).unwrap();
     api::close_namespace(namespace_handle)?;
 
