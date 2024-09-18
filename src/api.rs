@@ -477,7 +477,7 @@ pub fn close_load_balancer(load_balancer: HcnLoadBalancerHandle) -> Result<()> {
 }
 
 /// Registers a callback function to receive notifications of service-wide events.
-pub fn register_service_callback(
+pub unsafe fn register_service_callback(
     callback: HcnNotificationCallback,
     context: *const c_void,
     callback_handle: *mut HcnCallback,
